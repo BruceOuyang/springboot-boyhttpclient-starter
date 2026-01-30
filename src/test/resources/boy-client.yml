@@ -1,0 +1,22 @@
+boy:
+  httpclient:
+    endpoints:
+      - id: test-service
+        urls:
+          - http://localhost:8080
+          - http://localhost:8081
+        proxies:
+          - localhost:3128
+          - localhost:3129
+        retryPolicy:
+          maxAttempts: 3
+          backoffMs: 100
+          multiplier: 1.5
+
+      - id: another-service
+        urls:
+          - http://localhost:8082
+        retryPolicy:
+          maxAttempts: 2
+          backoffMs: 50
+          multiplier: 1.0

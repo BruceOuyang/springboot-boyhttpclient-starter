@@ -1,0 +1,53 @@
+# Boy HttpClient 示例配置文件
+# 复制此文件为 boy-client.yml 并根据实际情况修改
+
+# 此配置文件同时适用于 BoyHttpClient 和 BoyRestTemplate
+# BoyRestTemplate 是基于 Spring RestTemplate 的高可用封装
+
+boy:
+  httpclient:
+    endpoints:
+      # 服务1配置
+      - id: service1
+        urls:
+          - http://service1-host1:8080
+          - http://service1-host2:8080
+        # 代理配置（可选）
+        proxies:
+          - proxy1:3128
+          - proxy2:3128
+        # 重试策略配置
+        retryPolicy:
+          maxAttempts: 3      # 最大重试次数
+          backoffMs: 100       # 基础退避时间（毫秒）
+          multiplier: 1.5      # 退避乘数
+
+      # 服务2配置
+      - id: service2
+        urls:
+          - http://service2-host1:8080
+          - http://service2-host2:8080
+        # 重试策略配置
+        retryPolicy:
+          maxAttempts: 5      # 最大重试次数
+          backoffMs: 200       # 基础退避时间（毫秒）
+          multiplier: 2.0      # 退避乘数
+
+# 配置说明：
+# 1. 服务端点配置：每个服务端点包含 id、urls、proxies（可选）和 retryPolicy（可选）
+# 2. URLs 配置：多个服务地址，用于高可用负载均衡
+# 3. Proxies 配置：多个代理地址，用于代理高可用
+# 4. 重试策略：配置最大重试次数、退避时间和乘数
+#
+# 使用方式：
+# 1. BoyHttpClient：直接注入使用，适用于简单的 HTTP 请求
+# 2. BoyRestTemplate：基于 Spring RestTemplate，支持更丰富的 HTTP 客户端功能
+#
+# 示例代码：
+# // 使用 BoyHttpClient
+# @Autowired
+# private BoyHttpClient boyHttpClient;
+# 
+# // 使用 BoyRestTemplate
+# @Autowired
+# private BoyRestTemplate boyRestTemplate;
