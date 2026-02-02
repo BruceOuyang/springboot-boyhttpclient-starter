@@ -24,10 +24,10 @@ public class BoyHttpClientPropertiesTest {
         // 测试第一个服务端点
         BoyHttpClientProperties.ServiceEndpoint testService = properties.getEndpoints().get(0);
         assertEquals("test-service", testService.getId());
-        assertNotNull(testService.getUrls());
-        assertEquals(2, testService.getUrls().size());
-        assertTrue(testService.getUrls().contains("http://localhost:8080"));
-        assertTrue(testService.getUrls().contains("http://localhost:8081"));
+        assertNotNull(testService.getHosts());
+        assertEquals(2, testService.getHosts().size());
+        assertTrue(testService.getHosts().contains("http://localhost:8080"));
+        assertTrue(testService.getHosts().contains("http://localhost:8081"));
 
         // 测试代理配置
         assertNotNull(testService.getProxies());
@@ -44,9 +44,9 @@ public class BoyHttpClientPropertiesTest {
         // 测试第二个服务端点
         BoyHttpClientProperties.ServiceEndpoint anotherService = properties.getEndpoints().get(1);
         assertEquals("another-service", anotherService.getId());
-        assertNotNull(anotherService.getUrls());
-        assertEquals(1, anotherService.getUrls().size());
-        assertTrue(anotherService.getUrls().contains("http://localhost:8082"));
+        assertNotNull(anotherService.getHosts());
+        assertEquals(1, anotherService.getHosts().size());
+        assertTrue(anotherService.getHosts().contains("http://localhost:8082"));
 
         // 测试第二个服务端点的重试策略
         assertNotNull(anotherService.getRetryPolicy());

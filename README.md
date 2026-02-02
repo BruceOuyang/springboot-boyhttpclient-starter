@@ -45,7 +45,7 @@ boy:
     endpoints:
       # 服务1配置
       - id: service1
-        urls:
+        hosts:
           - http://service1-host1:8080
           - http://service1-host2:8080
         # 代理配置（可选）
@@ -60,7 +60,7 @@ boy:
 
       # 服务2配置
       - id: service2
-        urls:
+        hosts:
           - http://service2-host1:8080
           - http://service2-host2:8080
         # 重试策略配置

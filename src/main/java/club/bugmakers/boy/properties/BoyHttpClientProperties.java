@@ -40,7 +40,7 @@ public class BoyHttpClientProperties {
         /**
          * 服务URL列表
          */
-        private List<String> urls;
+        private List<String> hosts;
         /**
          * 代理地址列表
          */
@@ -58,12 +58,12 @@ public class BoyHttpClientProperties {
             this.id = id;
         }
 
-        public List<String> getUrls() {
-            return urls;
+        public List<String> getHosts() {
+            return hosts;
         }
 
-        public void setUrls(List<String> urls) {
-            this.urls = urls;
+        public void setHosts(List<String> hosts) {
+            this.hosts = hosts;
         }
 
         public List<String> getProxies() {

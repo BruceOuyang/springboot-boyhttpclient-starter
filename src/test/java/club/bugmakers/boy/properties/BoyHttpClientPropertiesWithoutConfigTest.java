@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestPropertySource(properties = {
         // 只设置少量必要的配置，模拟配置文件不存在的场景
         "boy.httpclient.endpoints[0].id=test-service",
-        "boy.httpclient.endpoints[0].urls[0]=http://localhost:8080"
+        "boy.httpclient.endpoints[0].hosts[0]=http://localhost:8080"
 })
 public class BoyHttpClientPropertiesWithoutConfigTest {
 
@@ -29,9 +29,9 @@ public class BoyHttpClientPropertiesWithoutConfigTest {
         // 测试服务端点
         BoyHttpClientProperties.ServiceEndpoint testService = properties.getEndpoints().get(0);
         assertEquals("test-service", testService.getId());
-        assertNotNull(testService.getUrls());
-        assertEquals(1, testService.getUrls().size());
-        assertTrue(testService.getUrls().contains("http://localhost:8080"));
+        assertNotNull(testService.getHosts());
+        assertEquals(1, testService.getHosts().size());
+        assertTrue(testService.getHosts().contains("http://localhost:8080"));
 
         // 测试默认值
         assertNull(testService.getProxies());

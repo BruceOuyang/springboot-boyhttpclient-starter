@@ -92,7 +92,7 @@ public class BoyHttpClient {
             throw new IllegalArgumentException("Endpoint not found: " + endpointId);
         }
 
-        List<String> urls = endpoint.getUrls();
+        List<String> hosts = endpoint.getHosts();
         List<String> proxies = endpoint.getProxies();
         BoyHttpClientProperties.RetryPolicy retryPolicy = endpoint.getRetryPolicy();
 
@@ -102,8 +102,8 @@ public class BoyHttpClient {
         double multiplier = retryPolicy != null ? retryPolicy.getMultiplier() : 1.5;
 
         while (attempts < maxAttempts) {
-            int urlIndex = random.nextInt(urls.size());
-            String baseUrl = urls.get(urlIndex);
+            int urlIndex = random.nextInt(hosts.size());
+            String baseUrl = hosts.get(urlIndex);
             String fullUrl = baseUrl + (path.startsWith("/") ? path : "/" + path);
 
             Proxy proxy = null;
