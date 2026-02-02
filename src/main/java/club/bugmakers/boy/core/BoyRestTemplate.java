@@ -48,7 +48,20 @@ public class BoyRestTemplate extends RestTemplate {
      * @return 响应结果
      */
     public <T> T getForObject(String endpointId, String path, Class<T> responseType) {
-        return executeWithEndpoint(endpointId, path, HttpMethod.GET, null, null, responseType);
+        return executeWithEndpoint(endpointId, path, HttpMethod.GET, null, null, null, responseType);
+    }
+
+    /**
+     * 发送 GET 请求（带header）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param headers 请求头
+     * @param responseType 响应类型
+     * @param <T> 响应类型泛型
+     * @return 响应结果
+     */
+    public <T> T getForObject(String endpointId, String path, Map<String, String> headers, Class<T> responseType) {
+        return executeWithEndpoint(endpointId, path, HttpMethod.GET, null, null, headers, responseType);
     }
 
     /**
@@ -61,7 +74,21 @@ public class BoyRestTemplate extends RestTemplate {
      * @return 响应结果
      */
     public <T> T getForObject(String endpointId, String path, Class<T> responseType, Map<String, ?> uriVariables) {
-        return executeWithEndpoint(endpointId, path, HttpMethod.GET, null, uriVariables, responseType);
+        return executeWithEndpoint(endpointId, path, HttpMethod.GET, null, uriVariables, null, responseType);
+    }
+
+    /**
+     * 发送 GET 请求（带header和URI变量）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param headers 请求头
+     * @param uriVariables URI 变量
+     * @param responseType 响应类型
+     * @param <T> 响应类型泛型
+     * @return 响应结果
+     */
+    public <T> T getForObject(String endpointId, String path, Map<String, String> headers, Class<T> responseType, Map<String, ?> uriVariables) {
+        return executeWithEndpoint(endpointId, path, HttpMethod.GET, null, uriVariables, headers, responseType);
     }
 
     /**
@@ -74,7 +101,21 @@ public class BoyRestTemplate extends RestTemplate {
      * @return 响应结果
      */
     public <T> T postForObject(String endpointId, String path, Object request, Class<T> responseType) {
-        return executeWithEndpoint(endpointId, path, HttpMethod.POST, request, null, responseType);
+        return executeWithEndpoint(endpointId, path, HttpMethod.POST, request, null, null, responseType);
+    }
+
+    /**
+     * 发送 POST 请求（带header）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param request 请求对象
+     * @param headers 请求头
+     * @param responseType 响应类型
+     * @param <T> 响应类型泛型
+     * @return 响应结果
+     */
+    public <T> T postForObject(String endpointId, String path, Object request, Map<String, String> headers, Class<T> responseType) {
+        return executeWithEndpoint(endpointId, path, HttpMethod.POST, request, null, headers, responseType);
     }
 
     /**
@@ -88,7 +129,22 @@ public class BoyRestTemplate extends RestTemplate {
      * @return 响应结果
      */
     public <T> T postForObject(String endpointId, String path, Object request, Class<T> responseType, Map<String, ?> uriVariables) {
-        return executeWithEndpoint(endpointId, path, HttpMethod.POST, request, uriVariables, responseType);
+        return executeWithEndpoint(endpointId, path, HttpMethod.POST, request, uriVariables, null, responseType);
+    }
+
+    /**
+     * 发送 POST 请求（带header和URI变量）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param request 请求对象
+     * @param headers 请求头
+     * @param responseType 响应类型
+     * @param uriVariables URI 变量
+     * @param <T> 响应类型泛型
+     * @return 响应结果
+     */
+    public <T> T postForObject(String endpointId, String path, Object request, Map<String, String> headers, Class<T> responseType, Map<String, ?> uriVariables) {
+        return executeWithEndpoint(endpointId, path, HttpMethod.POST, request, uriVariables, headers, responseType);
     }
 
     /**
@@ -98,7 +154,18 @@ public class BoyRestTemplate extends RestTemplate {
      * @param request 请求对象
      */
     public void put(String endpointId, String path, Object request) {
-        executeWithEndpoint(endpointId, path, HttpMethod.PUT, request, null, Void.class);
+        executeWithEndpoint(endpointId, path, HttpMethod.PUT, request, null, null, Void.class);
+    }
+
+    /**
+     * 发送 PUT 请求（带header）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param request 请求对象
+     * @param headers 请求头
+     */
+    public void put(String endpointId, String path, Object request, Map<String, String> headers) {
+        executeWithEndpoint(endpointId, path, HttpMethod.PUT, request, null, headers, Void.class);
     }
 
     /**
@@ -107,7 +174,17 @@ public class BoyRestTemplate extends RestTemplate {
      * @param path 请求路径
      */
     public void delete(String endpointId, String path) {
-        executeWithEndpoint(endpointId, path, HttpMethod.DELETE, null, null, Void.class);
+        executeWithEndpoint(endpointId, path, HttpMethod.DELETE, null, null, null, Void.class);
+    }
+
+    /**
+     * 发送 DELETE 请求（带header）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param headers 请求头
+     */
+    public void delete(String endpointId, String path, Map<String, String> headers) {
+        executeWithEndpoint(endpointId, path, HttpMethod.DELETE, null, null, headers, Void.class);
     }
 
     /**
@@ -117,11 +194,12 @@ public class BoyRestTemplate extends RestTemplate {
      * @param method HTTP 方法
      * @param request 请求对象
      * @param uriVariables URI 变量
+     * @param headers 请求头
      * @param responseType 响应类型
      * @param <T> 响应类型泛型
      * @return 响应结果
      */
-    private <T> T executeWithEndpoint(String endpointId, String path, HttpMethod method, Object request, Map<String, ?> uriVariables, Class<T> responseType) {
+    private <T> T executeWithEndpoint(String endpointId, String path, HttpMethod method, Object request, Map<String, ?> uriVariables, Map<String, String> headers, Class<T> responseType) {
         BoyHttpClientProperties.ServiceEndpoint endpoint = findEndpoint(endpointId);
         if (endpoint == null) {
             throw new IllegalArgumentException("Endpoint not found: " + endpointId);
@@ -152,26 +230,11 @@ public class BoyRestTemplate extends RestTemplate {
             try {
                 T result;
                 if (uriVariables != null) {
-                    result = super.getForObject(fullUrl, responseType, uriVariables);
+                    // 带URI变量的请求
+                    result = executeWithHeaders(fullUrl, method, request, uriVariables, headers, responseType);
                 } else {
-                    switch (method) {
-                        case GET:
-                            result = super.getForObject(fullUrl, responseType);
-                            break;
-                        case POST:
-                            result = super.postForObject(fullUrl, request, responseType);
-                            break;
-                        case PUT:
-                            super.put(fullUrl, request);
-                            result = null;
-                            break;
-                        case DELETE:
-                            super.delete(fullUrl);
-                            result = null;
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Unsupported HTTP method: " + method);
-                    }
+                    // 不带URI变量的请求
+                    result = executeWithHeaders(fullUrl, method, request, null, headers, responseType);
                 }
                 log.info("Request successful: {} {} via endpoint {}", method, fullUrl, endpointId);
                 return result;
@@ -189,6 +252,38 @@ public class BoyRestTemplate extends RestTemplate {
         }
 
         throw new RuntimeException("Max retry attempts reached for endpoint: " + endpointId);
+    }
+
+    /**
+     * 执行带header的请求
+     * @param url 请求URL
+     * @param method HTTP 方法
+     * @param request 请求对象
+     * @param uriVariables URI 变量
+     * @param headers 请求头
+     * @param responseType 响应类型
+     * @param <T> 响应类型泛型
+     * @return 响应结果
+     */
+    private <T> T executeWithHeaders(String url, HttpMethod method, Object request, Map<String, ?> uriVariables, Map<String, String> headers, Class<T> responseType) {
+        // 创建请求实体
+        HttpEntity<?> requestEntity;
+        if (headers != null && !headers.isEmpty()) {
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setAll(headers);
+            requestEntity = new HttpEntity<>(request, httpHeaders);
+        } else {
+            requestEntity = new HttpEntity<>(request);
+        }
+
+        // 执行请求
+        if (uriVariables != null) {
+            // 带URI变量的请求
+            return super.exchange(url, method, requestEntity, responseType, uriVariables).getBody();
+        } else {
+            // 不带URI变量的请求
+            return super.exchange(url, method, requestEntity, responseType).getBody();
+        }
     }
 
     /**

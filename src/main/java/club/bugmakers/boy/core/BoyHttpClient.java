@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -39,7 +40,19 @@ public class BoyHttpClient {
      * @throws IOException IO异常
      */
     public String get(String endpointId, String path) throws IOException {
-        return executeRequest(endpointId, path, "GET", null);
+        return executeRequest(endpointId, path, "GET", null, null);
+    }
+
+    /**
+     * 发送 GET 请求（带header）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param headers 请求头
+     * @return 响应结果
+     * @throws IOException IO异常
+     */
+    public String get(String endpointId, String path, Map<String, String> headers) throws IOException {
+        return executeRequest(endpointId, path, "GET", null, headers);
     }
 
     /**
@@ -51,7 +64,20 @@ public class BoyHttpClient {
      * @throws IOException IO异常
      */
     public String post(String endpointId, String path, String body) throws IOException {
-        return executeRequest(endpointId, path, "POST", body);
+        return executeRequest(endpointId, path, "POST", body, null);
+    }
+
+    /**
+     * 发送 POST 请求（带header）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param body 请求体
+     * @param headers 请求头
+     * @return 响应结果
+     * @throws IOException IO异常
+     */
+    public String post(String endpointId, String path, String body, Map<String, String> headers) throws IOException {
+        return executeRequest(endpointId, path, "POST", body, headers);
     }
 
     /**
@@ -63,7 +89,20 @@ public class BoyHttpClient {
      * @throws IOException IO异常
      */
     public String put(String endpointId, String path, String body) throws IOException {
-        return executeRequest(endpointId, path, "PUT", body);
+        return executeRequest(endpointId, path, "PUT", body, null);
+    }
+
+    /**
+     * 发送 PUT 请求（带header）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param body 请求体
+     * @param headers 请求头
+     * @return 响应结果
+     * @throws IOException IO异常
+     */
+    public String put(String endpointId, String path, String body, Map<String, String> headers) throws IOException {
+        return executeRequest(endpointId, path, "PUT", body, headers);
     }
 
     /**
@@ -74,7 +113,19 @@ public class BoyHttpClient {
      * @throws IOException IO异常
      */
     public String delete(String endpointId, String path) throws IOException {
-        return executeRequest(endpointId, path, "DELETE", null);
+        return executeRequest(endpointId, path, "DELETE", null, null);
+    }
+
+    /**
+     * 发送 DELETE 请求（带header）
+     * @param endpointId 服务端点ID
+     * @param path 请求路径
+     * @param headers 请求头
+     * @return 响应结果
+     * @throws IOException IO异常
+     */
+    public String delete(String endpointId, String path, Map<String, String> headers) throws IOException {
+        return executeRequest(endpointId, path, "DELETE", null, headers);
     }
 
     /**
@@ -83,10 +134,11 @@ public class BoyHttpClient {
      * @param path 请求路径
      * @param method 请求方法
      * @param body 请求体
+     * @param headers 请求头
      * @return 响应结果
      * @throws IOException IO异常
      */
-    private String executeRequest(String endpointId, String path, String method, String body) throws IOException {
+    private String executeRequest(String endpointId, String path, String method, String body, Map<String, String> headers) throws IOException {
         BoyHttpClientProperties.ServiceEndpoint endpoint = findEndpoint(endpointId);
         if (endpoint == null) {
             throw new IllegalArgumentException("Endpoint not found: " + endpointId);
@@ -118,7 +170,7 @@ public class BoyHttpClient {
             log.info("Attempt {}/{} for {} {} via proxy {}", attempts + 1, maxAttempts, method, fullUrl, proxyInfo);
             
             try {
-                String result = doRequest(fullUrl, method, body, proxy);
+                String result = doRequest(fullUrl, method, body, proxy, headers);
                 log.info("Request successful: {} {}", method, fullUrl);
                 return result;
             } catch (IOException e) {
@@ -143,10 +195,11 @@ public class BoyHttpClient {
      * @param method 请求方法
      * @param body 请求体
      * @param proxy 代理
+     * @param headers 请求头
      * @return 响应结果
      * @throws IOException IO异常
      */
-    private String doRequest(String url, String method, String body, Proxy proxy) throws IOException {
+    private String doRequest(String url, String method, String body, Proxy proxy, Map<String, String> headers) throws IOException {
         URLConnection connection;
         if (proxy != null) {
             connection = new URL(url).openConnection(proxy);
@@ -157,7 +210,16 @@ public class BoyHttpClient {
         HttpURLConnection httpConnection = (HttpURLConnection) connection;
         httpConnection.setRequestMethod(method);
         httpConnection.setDoOutput(true);
+        
+        // 设置默认Content-Type
         httpConnection.setRequestProperty("Content-Type", "application/json");
+        
+        // 设置自定义headers
+        if (headers != null && !headers.isEmpty()) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                httpConnection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+        }
 
         if (body != null) {
             try (OutputStream os = httpConnection.getOutputStream()) {
